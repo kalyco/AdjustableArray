@@ -21,12 +21,13 @@ public:
   // Nondefault constructor
   AdjustableArray(int aLen);
   // Copy contstructor
-  //AdjustableArray(const AdjustableArray & other)
+  // AdjustableArray(const AdjustableArray & other);
   // Destructor
-  //~AdjustableArray();
-    // Assign operator
-  // Assignment operator
+  // ~AdjustableArray();
+  // Assign operator
   // AdjustableArray & operator=(const AdjustableArray & other);
+
+  void output(std::ostream & s = std::cout) const;
 
   const int & operator[](int which) const;
   int & operator[](int which);
@@ -40,18 +41,19 @@ protected:
 
 private:
   node *head,*tail;
-  node * mA;
+  int * mA;
   int mLen;
   int mCap;
 
-  void allocate(int aLen);
   void copy(const AdjustableArray & other);
-  void cleanup();
+  void allocate(int aLen);
 
   bool atCapacity();
   int findLastIdx();
   node * findPreviousNode(int aData);
-  void addNode(int n);
-  // void updateTail(node *n);
+  node * addNode(int n);
 };
+
+std::ostream & operator<<(std::ostream & s, const AdjustableArray & a);
+
 #endif

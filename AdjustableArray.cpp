@@ -23,9 +23,14 @@ AdjustableArray::AdjustableArray(int aLen) :
  head(NULL),
  tail(NULL)
 {
-  // Array(mCap);
+  allocate(aLen);
   for (int i = 0; i < length(); i++) {
-    addNode((*this)[i]);
+    node *n = new node;    
+    if (head->next == NULL) {
+      head->next = n;
+    }
+    (*this)[i] = 0;
+    // (*this)[i] = n->data;
   }
 }
 
@@ -36,8 +41,9 @@ const int & AdjustableArray::operator[](int i) const
     std::cout << "Invalid array index." << std::endl;
     exit(1);
   }
-  node & n = mA[i];
-  return n.data;
+  return mA[i];
+  // node & n = mA[i];
+  // return n.data;
 }
 int & AdjustableArray::operator[](int i)
 {
@@ -45,11 +51,30 @@ int & AdjustableArray::operator[](int i)
     std::cout << "Invalid array index." << std::endl;
     exit(1);
   }
-  node & n = mA[i];
-  return n.data;
-} 
+  return mA[i];
+  // node & n = mA[i];
+  // return n.data;
+}
 
-void AdjustableArray::addNode(int n)
+void AdjustableArray::output(std::ostream & s) const
+{
+  s << "{";
+  for (int i = 0; i < mLen; i++) {
+    s << " " << (*this)[i];
+  }
+  s << " }";
+}
+
+std::ostream& operator<<(std::ostream& s, const AdjustableArray& a)
+{
+  a.output(s);
+  return s;
+}
+// end operator methods
+
+
+// Class methods
+node * AdjustableArray::addNode(int n)
 {
   node *newN = new node;
   newN->data = n;
@@ -66,6 +91,7 @@ void AdjustableArray::addNode(int n)
     tail->next = newN;
     tail = tail->next; // tail is updated to new Node
   }
+  return newN;
 }
 
 void AdjustableArray::allocate(int aLen)
@@ -77,19 +103,19 @@ void AdjustableArray::allocate(int aLen)
     return;
   }
   setLength(aLen);
-  mA = new node[aLen];
+  mA = new int[aLen];
 }
 
 void AdjustableArray::setLength(int aLen)
 {
- if (aLen < mCap) {
+ if (aLen <= mCap) {
    mLen = aLen;
-  } else {
-   std::cout << 
-   "Array size cap reached :<"
-   << std::endl;
-   exit(1);
   }
+ if (mLen <= mCap) return;  
+ std::cout << 
+  "Array size cap reached :<"
+  << std::endl;
+  exit(1);
 }
 
 bool AdjustableArray::atCapacity()
